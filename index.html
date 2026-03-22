@@ -341,11 +341,24 @@
                                     <span>Raw Input</span>
                                 </div>
                                 <div class="sc-body">
-                                    <div class="sc-content-raw">
-                                        <div class="sc-blob b1"></div>
-                                        <div class="sc-blob b2"></div>
-                                        <div class="sc-text-placeholder"></div>
-                                        <div class="sc-text-placeholder short"></div>
+                                    <div class="sc-content-raw-detailed">
+                                        <div class="sc-doc d-1">
+                                            <div class="sc-img-placeholder"></div>
+                                            <div class="sc-text-line t-1"></div>
+                                            <div class="sc-text-line t-2"></div>
+                                        </div>
+                                        <div class="sc-doc d-2">
+                                            <div class="sc-text-line t-3"></div>
+                                            <div class="sc-text-line t-1"></div>
+                                            <div class="sc-text-line t-4"></div>
+                                            <div class="sc-text-line t-2"></div>
+                                        </div>
+                                        <div class="sc-doc d-3">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                                        </div>
+                                        <div class="sc-floating-particle p-1"></div>
+                                        <div class="sc-floating-particle p-2"></div>
+                                        <div class="sc-floating-particle p-3"></div>
                                     </div>
                                 </div>
                             </div>
@@ -357,10 +370,21 @@
                                     <span>Parsing Engine</span>
                                 </div>
                                 <div class="sc-body">
-                                    <div class="sc-content-parsing">
-                                        <div class="sc-code-line"></div>
-                                        <div class="sc-code-line indented"></div>
-                                        <div class="sc-code-line"></div>
+                                    <div class="sc-content-parsing-detailed">
+                                        <div class="sc-code-window">
+                                            <div class="sc-code-header">
+                                                <span></span><span></span><span></span>
+                                            </div>
+                                            <div class="sc-code-content">
+                                                <div class="sc-line num">1</div><div class="sc-line code"><span class="c-keyword">import</span> { parse } <span class="c-keyword">from</span> <span class="c-string">'mindflow'</span>;</div>
+                                                <div class="sc-line num">2</div><div class="sc-line code"> </div>
+                                                <div class="sc-line num">3</div><div class="sc-line code"><span class="c-const">const</span> data = <span class="c-func">extractEntities</span>(rawText);</div>
+                                                <div class="sc-line num">4</div><div class="sc-line code"><span class="c-keyword">if</span> (data.hasRelations) {</div>
+                                                <div class="sc-line num">5</div><div class="sc-line code indented"><span class="c-func">buildGraph</span>(data.nodes);</div>
+                                                <div class="sc-line num">6</div><div class="sc-line code">}</div>
+                                            </div>
+                                            <div class="sc-scanner-beam"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -372,10 +396,32 @@
                                     <span>Neural Synthesis</span>
                                 </div>
                                 <div class="sc-body">
-                                    <div class="sc-content-synth">
-                                        <div class="sc-synth-ring"></div>
-                                        <div class="sc-synth-ring delay"></div>
-                                        <div class="sc-synth-core"></div>
+                                    <div class="sc-content-synth-detailed">
+                                        <svg class="sc-neural-net" viewBox="0 0 200 200">
+                                            <!-- Layers -->
+                                            <g class="nn-links">
+                                                <path d="M40 50 Q 100 50 160 50" class="nn-link"/>
+                                                <path d="M40 50 Q 100 100 160 150" class="nn-link"/>
+                                                <path d="M40 150 Q 100 100 160 50" class="nn-link"/>
+                                                <path d="M40 150 Q 100 150 160 150" class="nn-link"/>
+                                                <path d="M100 100 L 160 50" class="nn-link active-link"/>
+                                                <path d="M100 100 L 160 150" class="nn-link active-link"/>
+                                            </g>
+                                            <g class="nn-nodes">
+                                                <!-- Input -->
+                                                <circle cx="40" cy="50" r="6" class="nn-node"/>
+                                                <circle cx="40" cy="150" r="6" class="nn-node"/>
+                                                <!-- Hidden -->
+                                                <circle cx="100" cy="50" r="8" class="nn-node"/>
+                                                <circle cx="100" cy="100" r="12" class="nn-node core"/>
+                                                <circle cx="100" cy="150" r="8" class="nn-node"/>
+                                                <!-- Output -->
+                                                <circle cx="160" cy="50" r="6" class="nn-node"/>
+                                                <circle cx="160" cy="150" r="6" class="nn-node"/>
+                                            </g>
+                                        </svg>
+                                        <div class="sc-data-packet dp-1"></div>
+                                        <div class="sc-data-packet dp-2"></div>
                                     </div>
                                 </div>
                             </div>
@@ -387,15 +433,34 @@
                                     <span>Knowledge Graph</span>
                                 </div>
                                 <div class="sc-body">
-                                    <div class="sc-content-graph">
-                                        <div class="sc-node n-center">3</div>
-                                        <div class="sc-node n-side n-s1"></div>
-                                        <div class="sc-node n-side n-s2"></div>
-                                        <div class="sc-node n-side n-s3"></div>
-                                        <svg class="sc-edges" width="100%" height="100%">
-                                            <line x1="50%" y1="50%" x2="20%" y2="30%" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                                            <line x1="50%" y1="50%" x2="80%" y2="40%" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                                            <line x1="50%" y1="50%" x2="40%" y2="80%" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                                    <div class="sc-content-graph-detailed">
+                                        <div class="sc-orbit-ring r-1"></div>
+                                        <div class="sc-orbit-ring r-2"></div>
+                                        
+                                        <!-- Central Node -->
+                                        <div class="sc-g-node center">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                        </div>
+
+                                        <!-- Satellite Nodes -->
+                                        <div class="sc-g-node sat sat-1">
+                                            <div class="sat-label">History</div>
+                                        </div>
+                                        <div class="sc-g-node sat sat-2">
+                                            <div class="sat-label">Physics</div>
+                                        </div>
+                                        <div class="sc-g-node sat sat-3">
+                                            <div class="sat-label">Biology</div>
+                                        </div>
+
+                                        <!-- Connection Lines -->
+                                        <svg class="sc-g-lines" width="100%" height="100%">
+                                            <line x1="50%" y1="50%" x2="20%" y2="25%" class="g-line"/>
+                                            <line x1="50%" y1="50%" x2="80%" y2="35%" class="g-line"/>
+                                            <line x1="50%" y1="50%" x2="50%" y2="80%" class="g-line"/>
+                                            <circle cx="20%" cy="25%" r="2" class="g-dot"/>
+                                            <circle cx="80%" cy="35%" r="2" class="g-dot"/>
+                                            <circle cx="50%" cy="80%" r="2" class="g-dot"/>
                                         </svg>
                                     </div>
                                 </div>
