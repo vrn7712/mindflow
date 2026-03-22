@@ -531,18 +531,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Interactive Isometric Architecture ---
+    // --- Interactive Stacked Cards Architecture ---
     const isoSteps = document.querySelectorAll('.iso-step');
-    const isoLayers = document.querySelectorAll('.iso-layer');
-    const isoScene = document.querySelector('.iso-scene');
+    const stackedCards = Array.from(document.querySelectorAll('.stacked-card'));
+    const stackedCardsContainer = document.querySelector('.stacked-cards-container');
     
-    if (isoSteps.length > 0 && isoLayers.length > 0 && isoScene) {
+    if (isoSteps.length > 0 && stackedCards.length > 0 && stackedCardsContainer) {
         
         // Entrance animation
         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-            gsap.fromTo('.iso-scene', 
-                { opacity: 0, scale: 0.8 }, 
-                { opacity: 1, scale: 1, duration: 1.5, ease: "power3.out",
+            gsap.fromTo('.stacked-cards-container', 
+                { opacity: 0, x: 50 }, 
+                { opacity: 1, x: 0, duration: 1.5, ease: "power3.out",
                   scrollTrigger: {
                       trigger: ".iso-layout",
                       start: "top 70%"
@@ -552,36 +552,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const activateLayer = (layerNum) => {
-            // Expand the scene
-            isoScene.classList.add('expanded');
-            
-            // Calculate dynamic Z variable based on layer so we can pop it out exactly right
-            const baseZ = (layerNum - 1) * 120;
-            isoScene.style.setProperty('--base-z', `${baseZ}px`);
+            const targetLayerInt = parseInt(layerNum);
 
-            isoSteps.forEach(s => s.classList.remove('active'));
-            isoLayers.forEach(l => l.classList.remove('active'));
-            
-            const targetStep = document.querySelector(`.iso-step[data-layer="${layerNum}"]`);
-            const targetLayer = document.querySelector(`.iso-layer[data-layer="${layerNum}"]`);
-            
-            if (targetStep) targetStep.classList.add('active');
-            if (targetLayer) targetLayer.classList.add('active');
+            // Update Steps
+            isoSteps.forEach(s => {
+                if (parseInt(s.getAttribute('data-layer')) === targetLayerInt) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+
+            // Update Cards using position array (0 is front, 1 is behind, etc.)
+            // The active layer determines the front card. The rest shift behind it dynamically.
+            const total = stackedCards.length;
+            const activeIndex = targetLayerInt - 1;
+
+            stackedCards.forEach((card, idx) => {
+                // If active is 3 (Layer 4), we want 3 -> 0, 2 -> 1, 1 -> 2, 0 -> 3
+                let pos = (activeIndex - idx + total) % total;
+                card.setAttribute('data-pos', pos);
+                
+                if (pos === 0) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
         };
 
         const deactivateLayers = () => {
-            isoScene.classList.remove('expanded');
             // reset to default (Layer 4 active)
             activateLayer(4);
-            isoScene.classList.remove('expanded'); // remove expanded so it rests normally
         };
 
         isoSteps.forEach(step => {
             step.addEventListener('mouseenter', () => activateLayer(step.getAttribute('data-layer')));
         });
         
-        isoLayers.forEach(layer => {
-            layer.addEventListener('mouseenter', () => activateLayer(layer.getAttribute('data-layer')));
+        stackedCards.forEach(card => {
+            card.addEventListener('mouseenter', () => activateLayer(card.getAttribute('data-layer')));
         });
 
         const isoLayout = document.querySelector('.iso-layout');
@@ -591,6 +601,5 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initialize default state
         activateLayer(4);
-        isoScene.classList.remove('expanded');
     }
 });
