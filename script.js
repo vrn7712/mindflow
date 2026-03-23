@@ -551,39 +551,56 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
 
-        const activateLayer = (layerNum) => {
+        let currentActiveLayer = null;
+        let switchTimeout = null;
+        let isLocked = false;
+
+        const activateLayer = (layerNum, immediate = false) => {
             const targetLayerInt = parseInt(layerNum);
+            
+            // Guards: Already active or currently locked during a switch
+            if (targetLayerInt === currentActiveLayer) return;
+            if (isLocked && !immediate) return;
 
-            // Update Steps
-            isoSteps.forEach(s => {
-                if (parseInt(s.getAttribute('data-layer')) === targetLayerInt) {
-                    s.classList.add('active');
-                } else {
-                    s.classList.remove('active');
-                }
-            });
-
-            // Update Cards using position array (0 is front, 1 is behind, etc.)
-            // The active layer determines the front card. The rest shift behind it dynamically.
-            const total = stackedCards.length;
-            const activeIndex = targetLayerInt - 1;
-
-            stackedCards.forEach((card, idx) => {
-                // If active is 3 (Layer 4), we want 3 -> 0, 2 -> 1, 1 -> 2, 0 -> 3
-                let pos = (activeIndex - idx + total) % total;
-                card.setAttribute('data-pos', pos);
+            const executeSwitch = () => {
+                currentActiveLayer = targetLayerInt;
                 
-                if (pos === 0) {
-                    card.classList.add('active');
-                } else {
-                    card.classList.remove('active');
+                // Lockdown for a short duration to prevent hover-fighting while cards move
+                if (!immediate) {
+                    isLocked = true;
+                    setTimeout(() => isLocked = false, 400);
                 }
-            });
+
+                // Update Steps
+                isoSteps.forEach(s => {
+                    const sLayer = parseInt(s.getAttribute('data-layer'));
+                    s.classList.toggle('active', sLayer === targetLayerInt);
+                });
+
+                // Update Cards
+                const total = stackedCards.length;
+                const activeIndex = targetLayerInt - 1;
+
+                stackedCards.forEach((card, idx) => {
+                    let pos = (activeIndex - idx + total) % total;
+                    card.setAttribute('data-pos', pos);
+                    card.classList.toggle('active', pos === 0);
+                });
+            };
+
+            if (switchTimeout) clearTimeout(switchTimeout);
+            
+            if (immediate) {
+                executeSwitch();
+            } else {
+                switchTimeout = setTimeout(executeSwitch, 40);
+            }
         };
 
         const deactivateLayers = () => {
-            // reset to default (Layer 4 active)
-            activateLayer(4);
+            if (switchTimeout) clearTimeout(switchTimeout);
+            // reset to layer 4 (default) if we leave the entire layout
+            switchTimeout = setTimeout(() => activateLayer(4, true), 150);
         };
 
         isoSteps.forEach(step => {
@@ -591,7 +608,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         stackedCards.forEach(card => {
-            card.addEventListener('mouseenter', () => activateLayer(card.getAttribute('data-layer')));
+            const header = card.querySelector('.sc-header');
+            if (header) {
+                header.addEventListener('mouseenter', () => {
+                    activateLayer(card.getAttribute('data-layer'));
+                });
+            }
         });
 
         const isoLayout = document.querySelector('.iso-layout');
@@ -600,6 +622,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Initialize default state
-        activateLayer(4);
+        activateLayer(4, true);
     }
 });
