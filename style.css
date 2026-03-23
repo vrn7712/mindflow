@@ -170,7 +170,7 @@ html, body {
     width: 0%;
     background: rgba(255, 184, 0, 0.3);
     z-index: -1;
-    animation: fillProgress 2s ease-in-out forwards;
+    animation: fillProgress 2.5s ease-in-out forwards;
 }
 
 @keyframes fillProgress {

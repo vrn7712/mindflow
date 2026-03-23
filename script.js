@@ -43,17 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         window.addEventListener('mousemove', moveCursor);
         
-        // Hide loader after 2s
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            window.removeEventListener('mousemove', moveCursor);
-            
-            // Stagger hero elements intro gracefully
-            gsap.fromTo('.hero-section .blur-reveal', 
-                { opacity: 0, filter: 'blur(20px)', y: 60, scale: 0.95, rotationX: 10 },
-                { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, rotationX: 0, duration: 1.4, ease: 'power3.out', stagger: 0.15 }
-            );
-        }, 2000);
+        // Hide loader after the thinking bar animation finishes
+        thinkingCursor.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fillProgress') {
+                loader.classList.add('hidden');
+                window.removeEventListener('mousemove', moveCursor);
+                
+                // Stagger hero elements intro gracefully
+                gsap.fromTo('.hero-section .blur-reveal', 
+                    { opacity: 0, filter: 'blur(20px)', y: 60, scale: 0.95, rotationX: 10 },
+                    { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, rotationX: 0, duration: 1.4, ease: 'power3.out', stagger: 0.15 }
+                );
+            }
+        });
     }
 
     // 2. Hero Interactive Parallax
